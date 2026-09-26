@@ -13,16 +13,16 @@ cask "gaze" do
 
   url "https://gazeunlock.com/dl/Gaze.dmg"
   name "Gaze"
-  desc "Face ID-style face unlock for your Mac"
+  desc "Face ID-style face unlock"
   homepage "https://gazeunlock.com/"
 
-  depends_on macos: ">= :tahoe"
+  depends_on macos: :tahoe
 
   app "Gaze.app"
 
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Gaze.app"]
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/Gaze.app"],
+                          writable_paths: ["Gaze.app"], writable_base: :appdir
   end
 
   uninstall quit: "com.gazeunlock.Gaze"
